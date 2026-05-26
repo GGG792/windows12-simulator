@@ -9,10 +9,20 @@ import SettingsApp from './apps/Settings';
 const Desktop = () => {
   const { windows, openWindow, startMenuOpen, toggleStartMenu, focusWindow } = useWindowsStore();
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const desktopIcons = [
@@ -61,68 +71,80 @@ const Desktop = () => {
         backgroundImage: 'url(https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop)'
       }}
     >
-      <div className="p-4">
-        <div className="flex flex-col gap-4">
-          {desktopIcons.map((icon, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center w-20 p-2 rounded hover:bg-white/20 cursor-pointer"
-              onDoubleClick={() => openWindow(icon.app, icon.title)}
-            >
-              {icon.icon}
-              <span className="text-white text-xs text-center mt-1 drop-shadow">{icon.name}</span>
-            </div>
-          ))}
+      {isMobile ? (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="text-white text-center p-8">
+            <div className="text-6xl mb-4">📱</div>
+            <h2 className="text-2xl font-bold mb-2">请在桌面模式下查看</h2>
+            <p className="text-gray-300">建议使用电脑访问此网站以获得最佳体验</p>
+          </div>
         </div>
-      </div>
-
-      {windows.map((window) => (
-        <Window key={window.id} windowState={window}>
-          {renderAppContent(window.app)}
-        </Window>
-      ))}
-
-      {startMenuOpen && (
-        <div className="fixed bottom-12 left-1/2 transform -translate-x-1/2 w-[600px] h-[600px] bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl overflow-hidden z-50">
-          <div className="p-6 h-full flex flex-col">
-            <div className="mb-6">
-              <input
-                type="text"
-                placeholder="搜索应用、设置和文档"
-                className="w-full px-4 py-3 bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <h3 className="text-sm font-medium text-gray-600 mb-3">已固定</h3>
-            <div className="grid grid-cols-6 gap-2 mb-6">
-              {taskbarApps.map((app, index) => (
+      ) : (
+        <>
+          <div className="p-4">
+            <div className="flex flex-col gap-4">
+              {desktopIcons.map((icon, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer"
-                  onClick={() => {
-                    openWindow(app.app, app.title);
-                    toggleStartMenu();
-                  }}
+                  className="flex flex-col items-center w-20 p-2 rounded hover:bg-white/20 cursor-pointer"
+                  onDoubleClick={() => openWindow(icon.app, icon.title)}
                 >
-                  {app.icon}
-                  <span className="text-xs mt-1">{app.title}</span>
+                  {icon.icon}
+                  <span className="text-white text-xs text-center mt-1 drop-shadow">{icon.name}</span>
                 </div>
               ))}
             </div>
-
-            <div className="mt-auto flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                  U
-                </div>
-                <span className="text-sm">用户</span>
-              </div>
-              <button className="p-2 hover:bg-gray-100 rounded">
-                <div className="w-5 h-5">⏻</div>
-              </button>
-            </div>
           </div>
-        </div>
+
+          {windows.map((window) => (
+            <Window key={window.id} windowState={window}>
+              {renderAppContent(window.app)}
+            </Window>
+          ))}
+
+          {startMenuOpen && (
+            <div className="fixed bottom-12 left-1/2 transform -translate-x-1/2 w-[600px] h-[600px] bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl overflow-hidden z-50">
+              <div className="p-6 h-full flex flex-col">
+                <div className="mb-6">
+                  <input
+                    type="text"
+                    placeholder="搜索应用、设置和文档"
+                    className="w-full px-4 py-3 bg-gray-100 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <h3 className="text-sm font-medium text-gray-600 mb-3">已固定</h3>
+                <div className="grid grid-cols-6 gap-2 mb-6">
+                  {taskbarApps.map((app, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer"
+                      onClick={() => {
+                        openWindow(app.app, app.title);
+                        toggleStartMenu();
+                      }}
+                    >
+                      {app.icon}
+                      <span className="text-xs mt-1">{app.title}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-auto flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                      U
+                    </div>
+                    <span className="text-sm">用户</span>
+                  </div>
+                  <button className="p-2 hover:bg-gray-100 rounded">
+                    <div className="w-5 h-5">⏻</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       <div className="fixed bottom-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-lg border-t flex items-center justify-center px-4">
