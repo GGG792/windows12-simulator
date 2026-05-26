@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useWindowsStore, WindowState } from '@/store/useWindowsStore';
+import { useWindowsStore, WindowState } from '../store/useWindowsStore';
 import { Minus, Square, X } from 'lucide-react';
 
 interface WindowProps {

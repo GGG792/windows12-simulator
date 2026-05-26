@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useWindowsStore } from '@/store/useWindowsStore';
+import { useWindowsStore } from '../store/useWindowsStore';
 
 const BootScreen = () => {
   const { setPhase } = useWindowsStore();

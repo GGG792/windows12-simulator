@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useWindowsStore } from '@/store/useWindowsStore';
+import { useWindowsStore } from '../store/useWindowsStore';
 import { Folder, Globe, Settings, Menu } from 'lucide-react';
 import Window from './Window';
 import FileExplorer from './apps/FileExplorer';

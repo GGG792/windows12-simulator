@@ -1,8 +1,8 @@
-import { useWindowsStore } from '@/store/useWindowsStore';
-import InstallWizard from '@/components/InstallWizard';
-import BootScreen from '@/components/BootScreen';
-import LoginScreen from '@/components/LoginScreen';
-import Desktop from '@/components/Desktop';
+import { useWindowsStore } from './store/useWindowsStore';
+import InstallWizard from './components/InstallWizard';
+import BootScreen from './components/BootScreen';
+import LoginScreen from './components/LoginScreen';
+import Desktop from './components/Desktop';
 
 export default function App() {
   const { phase } = useWindowsStore();

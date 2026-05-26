@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useWindowsStore } from '@/store/useWindowsStore';
+import { useWindowsStore } from '../store/useWindowsStore';
 import { Check, ChevronRight, Globe, Shield, Monitor, HardDrive } from 'lucide-react';
 
 const InstallWizard = () => {

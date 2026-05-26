@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useWindowsStore } from '@/store/useWindowsStore';
+import { useWindowsStore } from '../store/useWindowsStore';
 import { Power, User } from 'lucide-react';
 
 const LoginScreen = () => {
